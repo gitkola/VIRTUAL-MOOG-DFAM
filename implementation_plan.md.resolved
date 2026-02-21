@@ -1,0 +1,118 @@
+# Virtual Moog DFAM — Implementation Plan
+
+Build a faithful browser-based recreation of the Moog DFAM (Drummer From Another Mother) semi-modular synthesizer as a single-page web application.
+
+## Proposed Changes
+
+### New Project Files
+
+#### [NEW] index.html
+Main HTML page — single-file entry point with semantic markup for all synth panels.
+
+#### [NEW] style.css
+Premium dark Moog-inspired design system:
+- Color palette: deep charcoal background (`#1a1a1a`), gold/amber accents (`#c8a84b`), white labels
+- Google Fonts: "Outfit" for clean modern typography
+- Custom rotary knob component (CSS + JS, SVG arc indicator)
+- LED indicators for sequencer steps
+- Glassmorphism panel cards, smooth hover/active micro-animations
+
+#### [NEW] app.js
+Web Audio API engine + sequencer logic + preset management.
+
+---
+
+### Audio Engine (Web Audio API)
+
+| Module | Web Audio Nodes |
+|---|---|
+| VCO 1 | `OscillatorNode` (sine morphed to triangle/square via `type`) |
+| VCO 2 | `OscillatorNode` + FM from VCO1 via `GainNode` |
+| White Noise | `AudioWorkletNode` or `AudioBufferSourceNode` (looped noise buffer) |
+| Mixer | Three `GainNode`s feeding a summing `GainNode` |
+| VCF | `BiquadFilterNode` (lowpass or highpass, cutoff + Q for resonance) |
+| VCA | `GainNode` controlled by VCA envelope |
+| Envelopes | `AudioParam` automation (`setValueAtTime`, `linearRampToValueAtTime`, `exponentialRampToValueAtTime`) — decay-only with configurable fast/slow attack |
+
+**Signal Path:**
+```
+VCO1 ──┐
+VCO2 ──┼─→ Mixer → VCF → VCA → Volume → AudioContext.destination
+Noise ─┘
+```
+
+**Envelope behaviour** (per DFAM spec):
+- **VCO EG**: Decay-only, bipolar output (±5V mapped to ±octave range), applied to VCO 1 & 2 pitch
+- **VCF EG**: Decay-only, bipolar amount knob, applied to filter cutoff
+- **VCA EG**: Decay-only, Fast (1ms) / Slow (100ms) attack; velocity from sequencer scales peak
+
+**FM**: VCO 1 audio → `GainNode` (1-2 FM Amount) → VCO 2 `frequency` AudioParam
+
+**Hard Sync**: Simulated by resetting VCO 2 phase on each VCO 1 cycle (implemented via a scripted approach using a high-frequency trigger to re-start VCO2)
+
+---
+
+### 8-Step Sequencer
+
+- Internal clock via `setInterval` driven by Tempo (10–10,000 BPM)
+- Each step stores: `pitch` (-1 to +1 normalized, maps to ±5V / ±2.5 octave offset) and `velocity` (0–1)
+- **SEQ Pitch Mod switch**: Routes sequencer pitch CV to VCO1+2 / OFF / VCO2-only
+- On each step: fire trigger → velocity scales EG peak → pitch applied to selected VCO(s)
+- **Advance**: manual step increment
+- **Trigger**: fires all 3 EGs at current step
+
+---
+
+### UI Layout (faithful to hardware panel order)
+
+```
+[ LOGO & HEADER ]
+[ VCO 1 ] [ VCO 2 ] [ MIXER ] [ VCF ] [ VCA / MASTER ]
+[ SEQUENCER: 8 steps × (Pitch + Velocity knobs + LED) ]
+[ TRANSPORT: Tempo | Run/Stop | Advance | Trigger | SEQ Pitch Mod ]
+[ PRESET BAR: Save | Load | Export | Import ]
+```
+
+---
+
+### Preset Management
+
+All state serialized to a plain JS object:
+```json
+{
+  "name": "My Preset",
+  "vco1": { "freq": 0.5, "wave": "triangle" },
+  "vco2": { "freq": 0.5, "wave": "triangle", "fmAmt": 0, "hardSync": false },
+  "vcoEG": { "egAmt": 0, "decay": 0.3 },
+  "mixer": { "vco1Level": 0.8, "noiseLevel": 0, "vco2Level": 0.5 },
+  "vcf": { "cutoff": 0.5, "resonance": 0.3, "mode": "lowpass", "modSrc": "eg", "egAmt": 0, "decay": 0.4 },
+  "vca": { "attack": "fast", "decay": 0.3, "volume": 0.8 },
+  "sequencer": {
+    "tempo": 120, "seqPitchMod": "both",
+    "steps": [{ "pitch": 0, "velocity": 0.8 }, ...]
+  }
+}
+```
+
+- **Save**: prompt for name → store in `localStorage['dfam_presets']` array
+- **Load**: dropdown list of saved presets → apply to all parameters
+- **Export**: `Blob` JSON download via anchor click
+- **Import**: `<input type="file">` → parse JSON → apply
+
+---
+
+## Verification Plan
+
+### Browser Manual Test (primary)
+1. Run `open /Users/nick/code/VIRTUAL-MOOG-DFAM/index.html` in terminal to open in browser
+2. Click **Run/Stop** → sequencer should start cycling steps with LEDs blinking
+3. Adjust **Tempo** knob → confirm BPM changes and LEDs blink faster/slower
+4. Turn **VCO 1 Level** up, ensure audio plays through speakers
+5. Turn **Cutoff** knob → confirm filter sweep is audible
+6. Toggle **VCF Mode** button → confirm tonal character changes (LP → HP)
+7. Adjust **Pitch** and **Velocity** per step → confirm per-step variation in pitch and volume
+8. Test **Advance** button → manually steps sequencer
+9. Test **Trigger** button → fires all envelopes without advancing
+10. **Save** a preset, **Reload** page, **Load** it back → all knobs should restore
+11. **Export** preset → JSON file downloads
+12. **Import** exported JSON → preset restores correctly
