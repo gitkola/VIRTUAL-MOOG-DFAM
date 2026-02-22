@@ -1,263 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Virtual Moog DFAM — Drummer From Another Mother</title>
-  <meta name="description" content="A faithful browser-based recreation of the Moog DFAM semi-modular percussion synthesizer with 8-step sequencer, dual VCOs, ladder filter, and preset management." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Virtual Moog DFAM — Drummer From Another Mother</title>
+    <meta name="description"
+        content="A faithful browser-based recreation of the Moog DFAM semi-modular percussion synthesizer with 8-step sequencer, dual VCOs, ladder filter, and preset management." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <div class="synth-wrapper">
+    <div class="synth-wrapper">
 
-    <!-- Header -->
-    <header class="synth-header">
-      <div class="header-left">
-        <div class="moog-logo">
-          <span class="logo-moog">MOOG</span>
-          <span class="logo-model">DFAM</span>
-        </div>
-        <div class="header-subtitle">DRUMMER FROM ANOTHER MOTHER · SEMI-MODULAR ANALOG PERCUSSION SYNTHESIZER</div>
-      </div>
-      <div class="header-right">
-        <div id="power-led" class="power-led active"></div>
-        <span class="power-label">POWER</span>
-      </div>
-    </header>
-
-    <!-- Main synth panel -->
-    <main class="synth-panel">
-
-      <!-- VCO 1 Section -->
-      <section class="panel-section vco-section" id="vco1-section" aria-label="VCO 1">
-        <h2 class="section-title">VCO 1</h2>
-        <div class="section-body">
-          <div class="knob-group">
-            <div class="knob-container">
-              <div class="knob-label">FREQUENCY</div>
-              <div class="knob large-knob" id="vco1-freq" data-param="vco1.freq" data-min="0" data-max="1" data-default="0.3" tabindex="0" role="slider" aria-label="VCO 1 Frequency" aria-valuemin="0" aria-valuemax="1"></div>
+        <!-- Header -->
+        <header class="synth-header">
+            <div class="header-left">
+                <div class="moog-logo">
+                    <span class="logo-moog">MOOG</span>
+                    <span class="logo-model">DFAM</span>
+                </div>
+                <div class="header-subtitle">DRUMMER FROM ANOTHER MOTHER · SEMI-MODULAR ANALOG PERCUSSION SYNTHESIZER
+                </div>
             </div>
-          </div>
-          <div class="switch-group">
-            <div class="switch-label">WAVE</div>
-            <div class="toggle-switch" id="vco1-wave" data-param="vco1.wave" data-options="triangle,square" data-default="0">
-              <button class="toggle-btn active" data-value="triangle" id="vco1-wave-tri" aria-pressed="true">TRI</button>
-              <button class="toggle-btn" data-value="square" id="vco1-wave-sq" aria-pressed="false">SQR</button>
+            <div class="header-right">
+                <button id="fullscreen-btn" class="preset-btn" aria-label="Toggle Fullscreen"
+                    style="margin-right: 15px; padding: 4px 8px;">
+                    <span class="preset-btn-icon">⛶</span> FULLSCREEN
+                </button>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <div id="power-led" class="power-led active"></div>
+                    <span class="power-label">POWER</span>
+                </div>
             </div>
-          </div>
-        </div>
-      </section>
+        </header>
 
-      <!-- VCO 2 Section -->
-      <section class="panel-section vco-section" id="vco2-section" aria-label="VCO 2">
-        <h2 class="section-title">VCO 2</h2>
-        <div class="section-body">
-          <div class="knob-group">
-            <div class="knob-container">
-              <div class="knob-label">FREQUENCY</div>
-              <div class="knob large-knob" id="vco2-freq" data-param="vco2.freq" data-min="0" data-max="1" data-default="0.35" tabindex="0" role="slider" aria-label="VCO 2 Frequency" aria-valuemin="0" aria-valuemax="1"></div>
+        <!-- Main synth panel -->
+        <main class="synth-panel">
+
+            <!-- VCO 1 Section -->
+            <section class="panel-section vco-section" id="vco1-section" aria-label="VCO 1">
+                <h2 class="section-title">VCO 1</h2>
+                <div class="section-body">
+                    <div class="knob-group">
+                        <div class="knob-container">
+                            <div class="knob-label">FREQUENCY</div>
+                            <div class="knob large-knob" id="vco1-freq" data-param="vco1.freq" data-min="0" data-max="1"
+                                data-default="0.3" tabindex="0" role="slider" aria-label="VCO 1 Frequency"
+                                aria-valuemin="0" aria-valuemax="1"></div>
+                        </div>
+                    </div>
+                    <div class="switch-group">
+                        <div class="switch-label">WAVE</div>
+                        <div class="toggle-switch" id="vco1-wave" data-param="vco1.wave" data-options="triangle,square"
+                            data-default="0">
+                            <button class="toggle-btn active" data-value="triangle" id="vco1-wave-tri"
+                                aria-pressed="true">TRI</button>
+                            <button class="toggle-btn" data-value="square" id="vco1-wave-sq"
+                                aria-pressed="false">SQR</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VCO 2 Section -->
+            <section class="panel-section vco-section" id="vco2-section" aria-label="VCO 2">
+                <h2 class="section-title">VCO 2</h2>
+                <div class="section-body">
+                    <div class="knob-group">
+                        <div class="knob-container">
+                            <div class="knob-label">FREQUENCY</div>
+                            <div class="knob large-knob" id="vco2-freq" data-param="vco2.freq" data-min="0" data-max="1"
+                                data-default="0.35" tabindex="0" role="slider" aria-label="VCO 2 Frequency"
+                                aria-valuemin="0" aria-valuemax="1"></div>
+                        </div>
+                    </div>
+                    <div class="switch-group">
+                        <div class="switch-label">WAVE</div>
+                        <div class="toggle-switch" id="vco2-wave" data-param="vco2.wave" data-options="triangle,square"
+                            data-default="0">
+                            <button class="toggle-btn active" data-value="triangle" id="vco2-wave-tri"
+                                aria-pressed="true">TRI</button>
+                            <button class="toggle-btn" data-value="square" id="vco2-wave-sq"
+                                aria-pressed="false">SQR</button>
+                        </div>
+                    </div>
+                    <div class="sub-section">
+                        <div class="knob-container">
+                            <div class="knob-label">1→2 FM AMT</div>
+                            <div class="knob medium-knob" id="fm-amount" data-param="vco2.fmAmount" data-min="0"
+                                data-max="1" data-default="0" tabindex="0" role="slider" aria-label="1 to 2 FM Amount"
+                                aria-valuemin="0" aria-valuemax="1"></div>
+                        </div>
+                        <div class="switch-group">
+                            <div class="switch-label">SYNC</div>
+                            <div class="led-button" id="hard-sync-btn" data-param="vco2.hardSync" role="button"
+                                aria-pressed="false" tabindex="0">
+                                <div class="led-button-led"></div>
+                                <span>HARD<br>SYNC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VCO Envelope Section -->
+            <section class="panel-section env-mini-section" id="vco-env-section" aria-label="VCO Envelope">
+                <h2 class="section-title">VCO EG</h2>
+                <div class="section-body">
+                    <div class="knob-container">
+                        <div class="knob-label">EG AMT</div>
+                        <div class="knob medium-knob bipolar" id="vco-eg-amt" data-param="vcoEG.egAmt" data-min="-1"
+                            data-max="1" data-default="0" tabindex="0" role="slider" aria-label="VCO EG Amount"
+                            aria-valuemin="-1" aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">DECAY</div>
+                        <div class="knob medium-knob" id="vco-decay" data-param="vcoEG.decay" data-min="0" data-max="1"
+                            data-default="0.3" tabindex="0" role="slider" aria-label="VCO Decay" aria-valuemin="0"
+                            aria-valuemax="1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mixer Section -->
+            <section class="panel-section mixer-section" id="mixer-section" aria-label="Mixer">
+                <h2 class="section-title">MIXER</h2>
+                <div class="section-body">
+                    <div class="knob-container">
+                        <div class="knob-label">VCO 1</div>
+                        <div class="knob medium-knob" id="mixer-vco1" data-param="mixer.vco1Level" data-min="0"
+                            data-max="1" data-default="0.8" tabindex="0" role="slider" aria-label="VCO 1 Level"
+                            aria-valuemin="0" aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">VCO 2</div>
+                        <div class="knob medium-knob" id="mixer-vco2" data-param="mixer.vco2Level" data-min="0"
+                            data-max="1" data-default="0.5" tabindex="0" role="slider" aria-label="VCO 2 Level"
+                            aria-valuemin="0" aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">NOISE</div>
+                        <div class="knob medium-knob" id="mixer-noise" data-param="mixer.noiseLevel" data-min="0"
+                            data-max="1" data-default="0.0" tabindex="0" role="slider" aria-label="Noise Level"
+                            aria-valuemin="0" aria-valuemax="1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VCF Section -->
+            <section class="panel-section vcf-section" id="vcf-section" aria-label="VCF Filter">
+                <h2 class="section-title">VCF</h2>
+                <div class="section-body">
+                    <div class="knob-container">
+                        <div class="knob-label">CUTOFF</div>
+                        <div class="knob large-knob" id="vcf-cutoff" data-param="vcf.cutoff" data-min="0" data-max="1"
+                            data-default="0.6" tabindex="0" role="slider" aria-label="VCF Cutoff" aria-valuemin="0"
+                            aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">RESONANCE</div>
+                        <div class="knob large-knob" id="vcf-resonance" data-param="vcf.resonance" data-min="0"
+                            data-max="1" data-default="0.3" tabindex="0" role="slider" aria-label="VCF Resonance"
+                            aria-valuemin="0" aria-valuemax="1"></div>
+                    </div>
+                    <div class="vcf-controls">
+                        <div class="led-button" id="vcf-mode-btn" data-param="vcf.mode" role="button"
+                            aria-pressed="false" tabindex="0">
+                            <div class="led-button-led"></div>
+                            <span>HP<br>MODE</span>
+                        </div>
+                        <div class="switch-group vcf-mod-switch">
+                            <div class="switch-label">VCF MOD</div>
+                            <div class="toggle-switch" id="vcf-mod-src" data-param="vcf.modSrc">
+                                <button class="toggle-btn active" data-value="eg" id="vcf-mod-eg"
+                                    aria-pressed="true">EG</button>
+                                <button class="toggle-btn" data-value="noise" id="vcf-mod-noise"
+                                    aria-pressed="false">NOISE</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">EG AMT</div>
+                        <div class="knob medium-knob bipolar" id="vcf-eg-amt" data-param="vcf.egAmt" data-min="-1"
+                            data-max="1" data-default="0.4" tabindex="0" role="slider" aria-label="VCF EG Amount"
+                            aria-valuemin="-1" aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">DECAY</div>
+                        <div class="knob medium-knob" id="vcf-decay" data-param="vcf.decay" data-min="0" data-max="1"
+                            data-default="0.4" tabindex="0" role="slider" aria-label="VCF Decay" aria-valuemin="0"
+                            aria-valuemax="1"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VCA Section -->
+            <section class="panel-section vca-section" id="vca-section" aria-label="VCA Envelope">
+                <h2 class="section-title">VCA</h2>
+                <div class="section-body">
+                    <div class="switch-group">
+                        <div class="switch-label">ATTACK</div>
+                        <div class="toggle-switch" id="vca-attack" data-param="vca.attack">
+                            <button class="toggle-btn active" data-value="fast" id="vca-attack-fast"
+                                aria-pressed="true">FAST</button>
+                            <button class="toggle-btn" data-value="slow" id="vca-attack-slow"
+                                aria-pressed="false">SLOW</button>
+                        </div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">DECAY</div>
+                        <div class="knob medium-knob" id="vca-decay" data-param="vca.decay" data-min="0" data-max="1"
+                            data-default="0.4" tabindex="0" role="slider" aria-label="VCA Decay" aria-valuemin="0"
+                            aria-valuemax="1"></div>
+                    </div>
+                    <div class="knob-container">
+                        <div class="knob-label">VOLUME</div>
+                        <div class="knob large-knob" id="master-volume" data-param="vca.volume" data-min="0"
+                            data-max="1" data-default="0.8" tabindex="0" role="slider" aria-label="Master Volume"
+                            aria-valuemin="0" aria-valuemax="1"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Sequencer Section -->
+        <section class="sequencer-panel" id="sequencer-section" aria-label="8-Step Sequencer">
+            <div class="seq-header">
+                <h2 class="section-title">SEQUENCER</h2>
             </div>
-          </div>
-          <div class="switch-group">
-            <div class="switch-label">WAVE</div>
-            <div class="toggle-switch" id="vco2-wave" data-param="vco2.wave" data-options="triangle,square" data-default="0">
-              <button class="toggle-btn active" data-value="triangle" id="vco2-wave-tri" aria-pressed="true">TRI</button>
-              <button class="toggle-btn" data-value="square" id="vco2-wave-sq" aria-pressed="false">SQR</button>
+            <div class="seq-steps" id="seq-steps">
+                <!-- Steps generated by JS -->
             </div>
-          </div>
-          <div class="sub-section">
-            <div class="knob-container">
-              <div class="knob-label">1→2 FM AMT</div>
-              <div class="knob medium-knob" id="fm-amount" data-param="vco2.fmAmount" data-min="0" data-max="1" data-default="0" tabindex="0" role="slider" aria-label="1 to 2 FM Amount" aria-valuemin="0" aria-valuemax="1"></div>
+
+            <!-- Transport Controls -->
+            <div class="transport-panel">
+                <div class="transport-left">
+                    <div class="knob-container">
+                        <div class="knob-label">TEMPO</div>
+                        <div class="knob large-knob" id="tempo-knob" data-param="seq.tempo" data-min="0" data-max="1"
+                            data-default="0.2" tabindex="0" role="slider" aria-label="Tempo" aria-valuemin="0"
+                            aria-valuemax="1"></div>
+                        <div class="bpm-display" id="bpm-display">120 BPM</div>
+                    </div>
+                </div>
+                <div class="transport-buttons">
+                    <button class="transport-btn run-stop-btn" id="run-stop-btn" aria-pressed="false">
+                        <span class="transport-led" id="run-led"></span>
+                        RUN / STOP
+                    </button>
+                    <button class="transport-btn" id="advance-btn">
+                        <span class="btn-icon">▶|</span>
+                        ADVANCE
+                    </button>
+                    <button class="transport-btn" id="trigger-btn">
+                        <span class="btn-icon">◉</span>
+                        TRIGGER
+                    </button>
+                </div>
+                <div class="transport-right">
+                    <div class="switch-group">
+                        <div class="switch-label">SEQ PITCH MOD</div>
+                        <div class="toggle-switch three-way" id="seq-pitch-mod">
+                            <button class="toggle-btn active" data-value="both" aria-pressed="true">VCO 1+2</button>
+                            <button class="toggle-btn" data-value="off" aria-pressed="false">OFF</button>
+                            <button class="toggle-btn" data-value="vco2" aria-pressed="false">VCO 2</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="switch-group">
-              <div class="switch-label">SYNC</div>
-              <div class="led-button" id="hard-sync-btn" data-param="vco2.hardSync" role="button" aria-pressed="false" tabindex="0">
-                <div class="led-button-led"></div>
-                <span>HARD<br>SYNC</span>
-              </div>
+        </section>
+
+        <!-- Preset Management Bar -->
+        <div class="preset-bar" id="preset-bar">
+            <div class="preset-bar-title">PRESETS</div>
+            <div class="preset-controls">
+                <input type="text" id="preset-name-input" class="preset-input" placeholder="Preset name…" maxlength="32"
+                    aria-label="Preset name" />
+                <button class="preset-btn save-btn" id="save-preset-btn" aria-label="Save preset">
+                    <span class="preset-btn-icon">💾</span> SAVE
+                </button>
+                <select id="preset-select" class="preset-select" aria-label="Select preset">
+                    <option value="">— Load Preset —</option>
+                </select>
+                <button class="preset-btn load-btn" id="load-preset-btn" aria-label="Load selected preset">
+                    <span class="preset-btn-icon">📂</span> LOAD
+                </button>
+                <button class="preset-btn export-btn" id="export-preset-btn" aria-label="Export preset as JSON">
+                    <span class="preset-btn-icon">⬇</span> EXPORT
+                </button>
+                <label class="preset-btn import-btn" for="import-file-input" aria-label="Import preset from JSON">
+                    <span class="preset-btn-icon">⬆</span> IMPORT
+                    <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;"
+                        aria-label="Import JSON preset file" />
+                </label>
+                <button class="preset-btn delete-btn" id="delete-preset-btn" aria-label="Delete selected preset">
+                    <span class="preset-btn-icon">🗑</span> DELETE
+                </button>
             </div>
-          </div>
+            <div id="preset-status" class="preset-status" role="status" aria-live="polite"></div>
         </div>
-      </section>
 
-      <!-- VCO Envelope Section -->
-      <section class="panel-section env-mini-section" id="vco-env-section" aria-label="VCO Envelope">
-        <h2 class="section-title">VCO EG</h2>
-        <div class="section-body">
-          <div class="knob-container">
-            <div class="knob-label">EG AMT</div>
-            <div class="knob medium-knob bipolar" id="vco-eg-amt" data-param="vcoEG.egAmt" data-min="-1" data-max="1" data-default="0" tabindex="0" role="slider" aria-label="VCO EG Amount" aria-valuemin="-1" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">DECAY</div>
-            <div class="knob medium-knob" id="vco-decay" data-param="vcoEG.decay" data-min="0" data-max="1" data-default="0.3" tabindex="0" role="slider" aria-label="VCO Decay" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Mixer Section -->
-      <section class="panel-section mixer-section" id="mixer-section" aria-label="Mixer">
-        <h2 class="section-title">MIXER</h2>
-        <div class="section-body">
-          <div class="knob-container">
-            <div class="knob-label">VCO 1</div>
-            <div class="knob medium-knob" id="mixer-vco1" data-param="mixer.vco1Level" data-min="0" data-max="1" data-default="0.8" tabindex="0" role="slider" aria-label="VCO 1 Level" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">VCO 2</div>
-            <div class="knob medium-knob" id="mixer-vco2" data-param="mixer.vco2Level" data-min="0" data-max="1" data-default="0.5" tabindex="0" role="slider" aria-label="VCO 2 Level" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">NOISE</div>
-            <div class="knob medium-knob" id="mixer-noise" data-param="mixer.noiseLevel" data-min="0" data-max="1" data-default="0.0" tabindex="0" role="slider" aria-label="Noise Level" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- VCF Section -->
-      <section class="panel-section vcf-section" id="vcf-section" aria-label="VCF Filter">
-        <h2 class="section-title">VCF</h2>
-        <div class="section-body">
-          <div class="knob-container">
-            <div class="knob-label">CUTOFF</div>
-            <div class="knob large-knob" id="vcf-cutoff" data-param="vcf.cutoff" data-min="0" data-max="1" data-default="0.6" tabindex="0" role="slider" aria-label="VCF Cutoff" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">RESONANCE</div>
-            <div class="knob large-knob" id="vcf-resonance" data-param="vcf.resonance" data-min="0" data-max="1" data-default="0.3" tabindex="0" role="slider" aria-label="VCF Resonance" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-          <div class="vcf-controls">
-            <div class="led-button" id="vcf-mode-btn" data-param="vcf.mode" role="button" aria-pressed="false" tabindex="0">
-              <div class="led-button-led"></div>
-              <span>HP<br>MODE</span>
-            </div>
-            <div class="switch-group vcf-mod-switch">
-              <div class="switch-label">VCF MOD</div>
-              <div class="toggle-switch" id="vcf-mod-src" data-param="vcf.modSrc">
-                <button class="toggle-btn active" data-value="eg" id="vcf-mod-eg" aria-pressed="true">EG</button>
-                <button class="toggle-btn" data-value="noise" id="vcf-mod-noise" aria-pressed="false">NOISE</button>
-              </div>
-            </div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">EG AMT</div>
-            <div class="knob medium-knob bipolar" id="vcf-eg-amt" data-param="vcf.egAmt" data-min="-1" data-max="1" data-default="0.4" tabindex="0" role="slider" aria-label="VCF EG Amount" aria-valuemin="-1" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">DECAY</div>
-            <div class="knob medium-knob" id="vcf-decay" data-param="vcf.decay" data-min="0" data-max="1" data-default="0.4" tabindex="0" role="slider" aria-label="VCF Decay" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- VCA Section -->
-      <section class="panel-section vca-section" id="vca-section" aria-label="VCA Envelope">
-        <h2 class="section-title">VCA</h2>
-        <div class="section-body">
-          <div class="switch-group">
-            <div class="switch-label">ATTACK</div>
-            <div class="toggle-switch" id="vca-attack" data-param="vca.attack">
-              <button class="toggle-btn active" data-value="fast" id="vca-attack-fast" aria-pressed="true">FAST</button>
-              <button class="toggle-btn" data-value="slow" id="vca-attack-slow" aria-pressed="false">SLOW</button>
-            </div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">DECAY</div>
-            <div class="knob medium-knob" id="vca-decay" data-param="vca.decay" data-min="0" data-max="1" data-default="0.4" tabindex="0" role="slider" aria-label="VCA Decay" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-          <div class="knob-container">
-            <div class="knob-label">VOLUME</div>
-            <div class="knob large-knob" id="master-volume" data-param="vca.volume" data-min="0" data-max="1" data-default="0.8" tabindex="0" role="slider" aria-label="Master Volume" aria-valuemin="0" aria-valuemax="1"></div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Sequencer Section -->
-    <section class="sequencer-panel" id="sequencer-section" aria-label="8-Step Sequencer">
-      <div class="seq-header">
-        <h2 class="section-title">SEQUENCER</h2>
-      </div>
-      <div class="seq-steps" id="seq-steps">
-        <!-- Steps generated by JS -->
-      </div>
-
-      <!-- Transport Controls -->
-      <div class="transport-panel">
-        <div class="transport-left">
-          <div class="knob-container">
-            <div class="knob-label">TEMPO</div>
-            <div class="knob large-knob" id="tempo-knob" data-param="seq.tempo" data-min="0" data-max="1" data-default="0.2" tabindex="0" role="slider" aria-label="Tempo" aria-valuemin="0" aria-valuemax="1"></div>
-            <div class="bpm-display" id="bpm-display">120 BPM</div>
-          </div>
-        </div>
-        <div class="transport-buttons">
-          <button class="transport-btn run-stop-btn" id="run-stop-btn" aria-pressed="false">
-            <span class="transport-led" id="run-led"></span>
-            RUN / STOP
-          </button>
-          <button class="transport-btn" id="advance-btn">
-            <span class="btn-icon">▶|</span>
-            ADVANCE
-          </button>
-          <button class="transport-btn" id="trigger-btn">
-            <span class="btn-icon">◉</span>
-            TRIGGER
-          </button>
-        </div>
-        <div class="transport-right">
-          <div class="switch-group">
-            <div class="switch-label">SEQ PITCH MOD</div>
-            <div class="toggle-switch three-way" id="seq-pitch-mod">
-              <button class="toggle-btn active" data-value="both" aria-pressed="true">VCO 1+2</button>
-              <button class="toggle-btn" data-value="off" aria-pressed="false">OFF</button>
-              <button class="toggle-btn" data-value="vco2" aria-pressed="false">VCO 2</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Preset Management Bar -->
-    <div class="preset-bar" id="preset-bar">
-      <div class="preset-bar-title">PRESETS</div>
-      <div class="preset-controls">
-        <input type="text" id="preset-name-input" class="preset-input" placeholder="Preset name…" maxlength="32" aria-label="Preset name" />
-        <button class="preset-btn save-btn" id="save-preset-btn" aria-label="Save preset">
-          <span class="preset-btn-icon">💾</span> SAVE
-        </button>
-        <select id="preset-select" class="preset-select" aria-label="Select preset">
-          <option value="">— Load Preset —</option>
-        </select>
-        <button class="preset-btn load-btn" id="load-preset-btn" aria-label="Load selected preset">
-          <span class="preset-btn-icon">📂</span> LOAD
-        </button>
-        <button class="preset-btn export-btn" id="export-preset-btn" aria-label="Export preset as JSON">
-          <span class="preset-btn-icon">⬇</span> EXPORT
-        </button>
-        <label class="preset-btn import-btn" for="import-file-input" aria-label="Import preset from JSON">
-          <span class="preset-btn-icon">⬆</span> IMPORT
-          <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;" aria-label="Import JSON preset file" />
-        </label>
-        <button class="preset-btn delete-btn" id="delete-preset-btn" aria-label="Delete selected preset">
-          <span class="preset-btn-icon">🗑</span> DELETE
-        </button>
-      </div>
-      <div id="preset-status" class="preset-status" role="status" aria-live="polite"></div>
+        <!-- Context info -->
+        <footer class="synth-footer">
+            <span>Click &amp; drag knobs to adjust · Scroll to fine-tune · Double-click to reset · Space =
+                Run/Stop</span>
+            <span>Virtual Moog DFAM · Web Audio API</span>
+        </footer>
     </div>
 
-    <!-- Context info -->
-    <footer class="synth-footer">
-      <span>Click &amp; drag knobs to adjust · Scroll to fine-tune · Double-click to reset · Space = Run/Stop</span>
-      <span>Virtual Moog DFAM · Web Audio API</span>
-    </footer>
-  </div>
-
-  <script src="app.js"></script>
+    <script src="app.js"></script>
 </body>
+
 </html>

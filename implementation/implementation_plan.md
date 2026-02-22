@@ -7,10 +7,13 @@ Build a faithful browser-based recreation of the Moog DFAM (Drummer From Another
 ### New Project Files
 
 #### [NEW] index.html
+
 Main HTML page — single-file entry point with semantic markup for all synth panels.
 
 #### [NEW] style.css
+
 Premium dark Moog-inspired design system:
+
 - Color palette: deep charcoal background (`#1a1a1a`), gold/amber accents (`#c8a84b`), white labels
 - Google Fonts: "Outfit" for clean modern typography
 - Custom rotary knob component (CSS + JS, SVG arc indicator)
@@ -18,6 +21,7 @@ Premium dark Moog-inspired design system:
 - Glassmorphism panel cards, smooth hover/active micro-animations
 
 #### [NEW] app.js
+
 Web Audio API engine + sequencer logic + preset management.
 
 ---
@@ -35,6 +39,7 @@ Web Audio API engine + sequencer logic + preset management.
 | Envelopes | `AudioParam` automation (`setValueAtTime`, `linearRampToValueAtTime`, `exponentialRampToValueAtTime`) — decay-only with configurable fast/slow attack |
 
 **Signal Path:**
+
 ```
 VCO1 ──┐
 VCO2 ──┼─→ Mixer → VCF → VCA → Volume → AudioContext.destination
@@ -42,6 +47,7 @@ Noise ─┘
 ```
 
 **Envelope behaviour** (per DFAM spec):
+
 - **VCO EG**: Decay-only, bipolar output (±5V mapped to ±octave range), applied to VCO 1 & 2 pitch
 - **VCF EG**: Decay-only, bipolar amount knob, applied to filter cutoff
 - **VCA EG**: Decay-only, Fast (1ms) / Slow (100ms) attack; velocity from sequencer scales peak
@@ -78,6 +84,7 @@ Noise ─┘
 ### Preset Management
 
 All state serialized to a plain JS object:
+
 ```json
 {
   "name": "My Preset",
@@ -104,6 +111,7 @@ All state serialized to a plain JS object:
 ## Verification Plan
 
 ### Browser Manual Test (primary)
+
 1. Run `open /Users/nick/code/VIRTUAL-MOOG-DFAM/index.html` in terminal to open in browser
 2. Click **Run/Stop** → sequencer should start cycling steps with LEDs blinking
 3. Adjust **Tempo** knob → confirm BPM changes and LEDs blink faster/slower
