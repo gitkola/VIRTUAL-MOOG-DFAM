@@ -562,21 +562,26 @@ function initKnobs() {
         let startY = 0;
         let startVal = 0;
         let isDragging = false;
+        let activePointerId = null;
 
         function onPointerDown(e) {
             if (e.button !== undefined && e.button !== 0) return;
             e.preventDefault();
             getAudioContext(); // ensure context on first interaction
+            activePointerId = e.pointerId;
             startY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
             startVal = parseFloat(knobEl.dataset.value);
             isDragging = true;
-            knobEl.setPointerCapture?.(e.pointerId);
-            document.addEventListener('pointermove', onPointerMove);
-            document.addEventListener('pointerup', onPointerUp);
+            if (knobEl.setPointerCapture && activePointerId !== undefined) {
+                knobEl.setPointerCapture(activePointerId);
+            }
+            knobEl.addEventListener('pointermove', onPointerMove);
+            knobEl.addEventListener('pointerup', onPointerUp);
+            knobEl.addEventListener('pointercancel', onPointerUp);
         }
 
         function onPointerMove(e) {
-            if (!isDragging) return;
+            if (!isDragging || e.pointerId !== activePointerId) return;
             const clientY = e.clientY;
             const dy = startY - clientY; // drag up = increase
             const sensitivity = e.shiftKey ? 0.003 : 0.008;
@@ -588,10 +593,13 @@ function initKnobs() {
             knobEl.setAttribute('aria-valuenow', newVal.toFixed(3));
         }
 
-        function onPointerUp() {
+        function onPointerUp(e) {
+            if (e.pointerId !== activePointerId) return;
             isDragging = false;
-            document.removeEventListener('pointermove', onPointerMove);
-            document.removeEventListener('pointerup', onPointerUp);
+            activePointerId = null;
+            knobEl.removeEventListener('pointermove', onPointerMove);
+            knobEl.removeEventListener('pointerup', onPointerUp);
+            knobEl.removeEventListener('pointercancel', onPointerUp);
         }
 
         // Double-click → reset
@@ -1018,7 +1026,37 @@ function initPresets() {
 }
 
 /* ============================================================
-   11. Init & Boot
+   11. Layout & Fullscreen
+   ============================================================ */
+
+function updateScale() {
+    const wrapper = document.querySelector('.synth-wrapper');
+    if (!wrapper) return;
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const isPortrait = winH > winW;
+    const targetW = isPortrait ? 740 : 1200;
+    const targetH = isPortrait ? 1250 : 800;
+    const scale = Math.min(winW / targetW, winH / targetH) * 0.98; // 2% padding
+    wrapper.style.transform = `scale(${scale})`;
+}
+
+function initFullscreen() {
+    const btn = document.getElementById('fullscreen-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.warn('Error enabling fullscreen', err);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    });
+}
+
+/* ============================================================
+   12. Init & Boot
    ============================================================ */
 
 function init() {
@@ -1028,6 +1066,8 @@ function init() {
     initLedButtons();
     initTransport();
     initPresets();
+    initFullscreen();
+    updateScale();
     renderAllKnobs();
 
     // Update BPM display from initial state
@@ -1037,8 +1077,11 @@ function init() {
     const powerLed = document.getElementById('power-led');
     setTimeout(() => powerLed.style.boxShadow = '0 0 12px var(--led-green)', 200);
 
-    // Resize → re-render knobs
-    window.addEventListener('resize', renderAllKnobs);
+    // Resize → update scale & re-render knobs
+    window.addEventListener('resize', () => {
+        updateScale();
+        renderAllKnobs();
+    });
 
     console.log('[DFAM] Virtual synthesizer ready. Press Space or click RUN/STOP to play.');
 }

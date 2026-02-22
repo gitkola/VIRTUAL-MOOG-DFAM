@@ -1,11 +1,13 @@
 # Virtual Moog DFAM - Task Checklist
 
 ## Planning
+
 - [x] Read DFAM Manual PDF - extract all specs
 - [x] Create task checklist
 - [ ] Create implementation plan
 
 ## Implementation
+
 - [ ] Set up project structure (index.html, style.css, app.js)
 - [ ] Implement Web Audio Engine
   - [ ] VCO 1 (triangle/square, 10-octave range)
@@ -46,6 +48,7 @@
   - [ ] Smooth animations
 
 ## Verification
+
 - [ ] Test all audio signal paths
 - [ ] Test sequencer clock and step advance
 - [ ] Test preset save/load/export
