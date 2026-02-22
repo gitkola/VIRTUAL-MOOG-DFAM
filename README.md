@@ -1,7 +1,8 @@
 # Virtual Moog DFAM
-### Drummer From Another Mother — Browser-Based Semi-Modular Analog Percussion Synthesizer
 
-A faithful recreation of the [Moog DFAM](https://www.moogmusic.com/products/dfam-drummer-another-mother) hardware synthesizer, running entirely in the browser with the **Web Audio API**. No plugins, no backend, no dependencies.
+## Drummer From Another Mother — Browser-Based Semi-Modular Analog Percussion Synthesizer
+
+A faithful recreation of the [Moog DFAM](https://www.moogmusic.com/synthesizers/dfam/) hardware synthesizer, running entirely in the browser with the **Web Audio API**. No plugins, no backend, no dependencies.
 
 ---
 
@@ -19,33 +20,44 @@ npx serve .
 # then open http://localhost:3000
 ```
 
+Serving your project locally (via `http://localhost` instead of opening the `file://` path in your browser) improves audio performance and functionality for several key reasons:
+
+Enables AudioWorklets and Web Workers: High-performance, low-latency audio processing in modern web apps relies on the AudioWorklet API. This allows the browser to process audio on a dedicated, real-time background thread (separate from the main UI thread), which prevents audio glitches or stuttering when the UI is busy. However, browsers strictly require a secure context (`https://` or `http://localhost`) to use these APIs; they are blocked on `file://` URLs.
+Bypasses Local File Restrictions (CORS): If your synthesizer needs to load external audio samples, impulses, or JSON configuration files using `fetch()`, doing so from a `file://` URL will usually trigger Cross-Origin Resource Sharing (CORS) errors. A local server allows the app to fetch these internal assets freely.
+Browser Security & Autoplay Policies: Browsers apply different latency and power/performance profiles, as well as stricter autoplay rules, to local files. Running via `localhost` treats your app as a standard web application, giving it standard privileges and access to the full Web Audio API capabilities.
+In short, serving locally unlocks the advanced, multi-threaded audio processing features of the browser that are disabled when just opening the raw HTML file!
+
 ---
 
 ## Features
 
 ### Signal Path
-```
+
+```text
 VCO 1 ──┐
 VCO 2 ──┼──► Mixer ──► VCF (Ladder) ──► VCA ──► Master Volume ──► Output
- Noise ──┘
+Noise ──┘
 ```
 
 ### Oscillators (VCO 1 & 2)
+
 | Control | Range | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Frequency | 20 Hz – 20 kHz | 10-octave range |
 | Waveform | Triangle / Square | Toggle switch |
 | 1→2 FM Amount | 0 – max | VCO 1 modulates VCO 2 pitch |
 | Hard Sync | On / Off | Locks VCO 2 phase to VCO 1 |
 
 ### Envelopes (all decay-only, velocity-scaled)
+
 | Envelope | Amount | Decay |
-|---|---|---|
+| --- | --- | --- |
 | VCO EG | Bipolar (±2 oct) | 1 ms – 5 s |
 | VCF EG | Bipolar | 1 ms – 5 s |
 | VCA EG | Fast (1 ms) / Slow (100 ms) attack | 1 ms – 5 s |
 
 ### Filter (VCF)
+
 - Moog ladder filter simulation
 - Cutoff: 20 Hz – 18 kHz
 - Resonance: up to self-oscillation
@@ -53,21 +65,24 @@ VCO 2 ──┼──► Mixer ──► VCF (Ladder) ──► VCA ──► Ma
 - **VCF Mod** — modulate cutoff with EG or White Noise
 
 ### 8-Step Sequencer
+
 - **Tempo**: 10 – 10,000 BPM
 - Per step: independent **Pitch** (±2 octaves) and **Velocity** (0–100%) knobs
 - **SEQ Pitch Mod** switch: route pitch CV to `VCO 1+2` / `OFF` / `VCO 2`
 - Green LED step indicators
 
 ### Transport
+
 | Button | Action |
-|---|---|
+| --- | --- |
 | RUN / STOP | Start or stop the sequencer |
 | ADVANCE | Manually advance one step (when stopped) |
 | TRIGGER | Fire all three envelopes at the current step |
 
 ### Preset Management
+
 | Button | Action |
-|---|---|
+| --- | --- |
 | 💾 SAVE | Save current patch to `localStorage` |
 | 📂 LOAD | Restore a saved preset |
 | ⬇ EXPORT | Download preset as `.dfam.json` |
@@ -79,7 +94,7 @@ VCO 2 ──┼──► Mixer ──► VCF (Ladder) ──► VCA ──► Ma
 ## Controls
 
 | Interaction | Action |
-|---|---|
+| --- | --- |
 | Click & drag up/down | Adjust knob |
 | Scroll wheel | Fine-tune knob |
 | Shift + drag / scroll | Ultra-fine tune |
@@ -91,7 +106,7 @@ VCO 2 ──┼──► Mixer ──► VCF (Ladder) ──► VCA ──► Ma
 
 ## Project Structure
 
-```
+```text
 VIRTUAL-MOOG-DFAM/
 ├── index.html        # HTML layout — all synth panels
 ├── style.css         # Premium dark Moog design system
@@ -109,7 +124,7 @@ VIRTUAL-MOOG-DFAM/
 Works in any modern browser with Web Audio API support.
 
 | Browser | Status |
-|---|---|
+| --- | --- |
 | Chrome / Edge 80+ | ✅ Full support |
 | Firefox 76+ | ✅ Full support |
 | Safari 14.1+ | ✅ Full support |

@@ -20,6 +20,7 @@ A fully functional browser-based recreation of the **Moog DFAM** (Drummer From A
 ## Synth Modules Implemented
 
 ### Signal Path
+
 ```
 VCO1 ──┐
 VCO2 ──┼─→ Mixer → VCF → VCA → Master Volume → Output
@@ -27,16 +28,19 @@ Noise ─┘
 ```
 
 ### VCO Section
+
 - **VCO 1 & 2**: Triangle/Square waveforms, 10-octave range (20Hz–20kHz)
 - **1→2 FM Amount**: VCO 1 modulates VCO 2 frequency (linear FM)
 - **Hard Sync**: Forces VCO 2 to track VCO 1 frequency
 
 ### Envelopes (all decay-only)
+
 - **VCO EG**: Bipolar modulation (±2 octaves) of both VCOs pitch
 - **VCF EG**: Bipolar frequency modulation of filter cutoff
 - **VCA EG**: Fast (1ms) or Slow (100ms) attack modes, velocity-scaled
 
 ### Filter (VCF)
+
 - **Moog ladder** simulation via `BiquadFilterNode`
 - Cutoff: 20Hz – 18kHz
 - Resonance: up to self-oscillation range
@@ -44,9 +48,11 @@ Noise ─┘
 - **VCF Mod**: EG or Noise as modulation source
 
 ### Mixer
+
 - Independent levels for VCO 1, VCO 2, and White Noise
 
 ### 8-Step Sequencer
+
 - **Tempo**: 10–10,000 BPM
 - Per step: **Pitch** (±2 octaves) + **Velocity** (0–100%)
 - **SEQ Pitch Mod**: Routes pitch CV → VCO 1+2 / OFF / VCO 2 only
@@ -54,6 +60,7 @@ Noise ─┘
 - Green LEDs show the active step in real time
 
 ### Preset Management
+
 - **SAVE** — names and saves current patch to `localStorage`
 - **LOAD** — restores a saved preset from the dropdown
 - **EXPORT** — downloads preset as `.dfam.json` file
